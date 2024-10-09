@@ -45,8 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // 下面这个方法省略了，则会少一些过滤器等配置
-        // super.configure(http)
         http
                 // 前后端分离项目关闭 csrf
                 .csrf().disable()

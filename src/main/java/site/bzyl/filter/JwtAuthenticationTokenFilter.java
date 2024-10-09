@@ -40,10 +40,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         //解析token
-        String userid;
+        String userId;
         try {
             Claims claims = JwtUtil.parseJWT(token);
-            userid = claims.getSubject();
+            userId = claims.getSubject();
         } catch (Exception e) {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -53,7 +53,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         LoginUser loginUser = null;
 
         //从redis中获取用户信息
-        String redisKey = RedisConstant.LOGIN_TOKEN_PREFIX + userid;
+        String redisKey = RedisConstant.LOGIN_TOKEN_PREFIX + userId;
         loginUser = redisCache.getCacheObject(redisKey);
         if (Objects.isNull(loginUser)) {
             response.setContentType("application/json;charset=UTF-8");
@@ -64,7 +64,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         //存入SecurityContextHolder，给后面的过滤器确定认证状态
         Authentication authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUser, null, null);
+                new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //放行请求
         filterChain.doFilter(request, response);

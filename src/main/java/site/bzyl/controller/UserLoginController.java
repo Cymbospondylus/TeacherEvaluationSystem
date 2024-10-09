@@ -1,5 +1,6 @@
 package site.bzyl.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import site.bzyl.common.ResponseResult;
 import site.bzyl.dto.UserLoginRequestDTO;
@@ -25,6 +26,7 @@ public class UserLoginController {
     }
 
     @GetMapping("/hello")
+    @PreAuthorize("hasAuthority('student')")
     public String hello() {
         return "hello";
     }
