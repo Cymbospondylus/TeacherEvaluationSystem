@@ -3,14 +3,18 @@ package site.bzyl.eneity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
 @TableName("tb_user")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDO extends BaseDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
