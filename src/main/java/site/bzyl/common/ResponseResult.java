@@ -1,11 +1,13 @@
 package site.bzyl.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 
 /**
  * 统一响应对象
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Data // 没有getter方法会导致响应给前端的结果是空白
 public class ResponseResult<T> {
     /**
      * 状态码
@@ -20,56 +22,36 @@ public class ResponseResult<T> {
      */
     private T data;
 
-    private static Integer SUCCESS_CODE = 200;
+    private static final Integer SUCCESS_CODE = 200;
 
-    public ResponseResult(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
+    private static final Integer ERROR_CODE = 500;
 
-    public ResponseResult(Integer code, T data) {
-        this.code = code;
-        this.data = data;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public ResponseResult(Integer code, String msg, T data) {
-        this.code = code;
-        this.msg = msg;
-        this.data = data;
-    }
 
     public ResponseResult() {
     }
 
+    public static <T> ResponseResult success() {
+        ResponseResult<T> responseResult = new ResponseResult<>();
+        responseResult.code = SUCCESS_CODE;
+        responseResult.msg = "响应成功";
+        responseResult.data = null;
+        return responseResult;
+    }
+
     public static <T> ResponseResult success(T data) {
         ResponseResult<T> responseResult = new ResponseResult<>();
-        responseResult.code = 200;
+        responseResult.code = SUCCESS_CODE;
         responseResult.msg = "响应成功";
         responseResult.data = data;
+        return responseResult;
+    }
+
+
+    public static <T> ResponseResult failure(RuntimeException ex) {
+        ResponseResult<T> responseResult = new ResponseResult<>();
+        responseResult.code = 500;
+        responseResult.msg = ex.getMessage();
+        responseResult.data = null;
         return responseResult;
     }
 }
