@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserLoginServiceImpl implements UserLoginService {
@@ -43,7 +44,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         // 会话信息放入 redis
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("token", jwt);
-        redisCache.setCacheObject(RedisConstant.LOGIN_TOKEN_PREFIX + userId, loginUser);
+        redisCache.setCacheObject(RedisConstant.LOGIN_TOKEN_PREFIX + userId, loginUser, 30, TimeUnit.SECONDS);
         return ResponseResult.success(resultMap);
     }
 

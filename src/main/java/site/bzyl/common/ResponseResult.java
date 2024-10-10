@@ -1,13 +1,17 @@
 package site.bzyl.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 统一响应对象
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data // 没有getter方法会导致响应给前端的结果是空白
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseResult<T> {
     /**
      * 状态码
@@ -26,9 +30,12 @@ public class ResponseResult<T> {
 
     private static final Integer ERROR_CODE = 500;
 
-
-    public ResponseResult() {
+    public ResponseResult(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+        this.data = null;
     }
+
 
     public static <T> ResponseResult success() {
         ResponseResult<T> responseResult = new ResponseResult<>();

@@ -34,9 +34,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("token");
         //如果还没有token，说明是初次请求，没登录，直接放行去登录即可
         if (!StringUtils.hasText(token)) {
-            //放行
             filterChain.doFilter(request, response);
-            //这里要return是因为响应回来的时候还会回到doFilter方法的下一行
             return;
         }
         //解析token
@@ -45,10 +43,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             Claims claims = JwtUtil.parseJWT(token);
             userId = claims.getSubject();
         } catch (Exception e) {
-            response.setContentType("application/json;charset=UTF-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"message\": \"" + "token非法" + "\", \"status\": 401}");
-            return;
+            e.printStackTrace();
+            throw new RuntimeException("token非法");
         }
         LoginUser loginUser = null;
 
@@ -56,12 +52,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String redisKey = RedisConstant.LOGIN_TOKEN_PREFIX + userId;
         loginUser = redisCache.getCacheObject(redisKey);
         if (Objects.isNull(loginUser)) {
-            response.setContentType("application/json;charset=UTF-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"message\": \"" + "用户未登录" + "\", \"status\": 401}");
-            return;
+            throw new RuntimeException("用户未登录");
         }
-
         //存入SecurityContextHolder，给后面的过滤器确定认证状态
         Authentication authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
