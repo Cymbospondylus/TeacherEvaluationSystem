@@ -6,10 +6,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import site.bzyl.eneity.LoginUser;
 import site.bzyl.eneity.UserDO;
+import site.bzyl.mapper.MenuMapper;
 import site.bzyl.mapper.UserMapper;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,6 +21,8 @@ import java.util.Objects;
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private MenuMapper menuMapper;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -30,10 +34,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (Objects.isNull(userDO)) {
             throw new RuntimeException("用户名不存在");
         }
-
+        // 根据用户Id查询权限
+        List<String> perms = menuMapper.selectPermsByUserId(userDO.getUserId());
         return LoginUser.builder()
                 .user(userDO)
-                .permissions(Arrays.asList("student", "admin"))
+                .permissions(perms)
                 .build();
     }
 }

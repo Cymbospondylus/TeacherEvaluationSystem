@@ -35,9 +35,9 @@ public class UserDO extends BaseDO implements Serializable {
     private String password;
 
     /**
-     * 用户角色（0：管理员；1：学生）
+     * 状态（0：正常；1：禁用）
      */
-    private Integer role;
+    private Integer status;
 
     /**
      * 邮箱
@@ -48,6 +48,5 @@ public class UserDO extends BaseDO implements Serializable {
      * 手机号
      */
     private String phone;
-
 
 }

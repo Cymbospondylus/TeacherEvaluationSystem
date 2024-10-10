@@ -26,7 +26,7 @@ public class UserLoginController {
     }
 
     @GetMapping("/hello")
-    @PreAuthorize("hasAuthority('student')")
+    @PreAuthorize("hasAuthority('management:individual')")
     public String hello() {
         return "hello";
     }
