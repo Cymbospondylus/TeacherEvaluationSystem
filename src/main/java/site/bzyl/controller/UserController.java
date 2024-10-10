@@ -1,33 +1,32 @@
 package site.bzyl.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import site.bzyl.common.ResponseResult;
 import site.bzyl.dto.UserLoginRequestDTO;
-import site.bzyl.service.UserLoginService;
+import site.bzyl.service.UserService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
-public class UserLoginController {
+public class UserController {
 
     @Resource
-    private UserLoginService userLoginService;
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseResult login(@RequestBody UserLoginRequestDTO requestParam) {
-        return userLoginService.login(requestParam);
+        return userService.login(requestParam);
     }
 
     @GetMapping("/logout")
     public ResponseResult logout() {
-        return userLoginService.logout();
+        return userService.logout();
     }
 
-    @GetMapping("/hello")
-    @PreAuthorize("hasAuthority('management:individual')")
-    public String hello() {
-        return "hello";
+    @GetMapping("/info")
+    public ResponseResult getUserInfo(HttpServletRequest request) {
+        return userService.getUserInfo(request);
     }
 }

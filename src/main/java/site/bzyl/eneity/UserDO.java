@@ -35,6 +35,11 @@ public class UserDO extends BaseDO implements Serializable {
     private String password;
 
     /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
      * 状态（0：正常；1：禁用）
      */
     private Integer status;
