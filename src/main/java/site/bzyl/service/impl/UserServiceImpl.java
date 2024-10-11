@@ -17,6 +17,7 @@ import site.bzyl.common.UserConstant;
 import site.bzyl.common.enums.UserRole;
 import site.bzyl.dto.req.AddAdminReqDTO;
 import site.bzyl.dto.req.PageUserReqDTO;
+import site.bzyl.dto.req.UpdateAdminReqDTO;
 import site.bzyl.dto.resp.PageUserRespDTO;
 import site.bzyl.dto.resp.UserInfoResponseDTO;
 import site.bzyl.dto.req.UserLoginRequestDTO;
@@ -134,6 +135,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                 .roleId(UserRole.ADMIN.getRoleId())
                 .build();
         userRoleMapper.insert(userRoleDO);
+        return ResponseResult.success();
+    }
+
+    @Override
+    public ResponseResult updateAdmin(Long userId, UpdateAdminReqDTO requestParam) {
+        UserDO userDO = baseMapper.selectById(userId);
+        userDO.setEmail(requestParam.getEmail())
+                .setPhone(requestParam.getPhone())
+                .setStatus(requestParam.getStatus().equals("enabled") ? 0 : 1);
+        baseMapper.updateById(userDO);
         return ResponseResult.success();
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import site.bzyl.common.ResponseResult;
 import site.bzyl.dto.req.AddAdminReqDTO;
 import site.bzyl.dto.req.PageUserReqDTO;
+import site.bzyl.dto.req.UpdateAdminReqDTO;
 import site.bzyl.service.UserService;
 
 import javax.annotation.Resource;
@@ -25,5 +26,10 @@ public class AdminController {
     @PostMapping
     public ResponseResult addAdmin(@RequestBody AddAdminReqDTO requestParam) {
         return userService.addAdmin(requestParam);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseResult updateAdmin(@PathVariable Long userId, @RequestBody UpdateAdminReqDTO requestParam) {
+        return userService.updateAdmin(userId, requestParam);
     }
 }

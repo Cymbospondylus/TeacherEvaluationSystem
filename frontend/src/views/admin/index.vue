@@ -93,11 +93,45 @@
         <el-button type="primary" @click="submitAdd">确定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="编辑管理员" :visible.sync="editDialogVisible">
+      <el-form :model="editData" label-width="80px">
+        <!-- 用户名（设为只读，不可修改） -->
+        <el-form-item label="用户名">
+          <el-input v-model="editData.username" disabled></el-input>
+        </el-form-item>
+
+        <!-- 邮箱 -->
+        <el-form-item label="邮箱">
+          <el-input v-model="editData.email"></el-input>
+        </el-form-item>
+
+        <!-- 电话 -->
+        <el-form-item label="电话">
+          <el-input v-model="editData.phone"></el-input>
+        </el-form-item>
+
+        <!-- 状态选项 -->
+        <el-form-item label="状态">
+          <el-select v-model="editData.status" placeholder="请选择状态">
+            <el-option label="启用" value="enabled"></el-option>
+            <el-option label="禁用" value="disabled"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitEdit">确定</el-button>
+      </div>
+    </el-dialog>
+
+
+
   </div>
 </template>
 
 <script>
-import { fetchAdminList, addAdmin } from '@/api/admin'
+import {fetchAdminList, addAdmin, editAdmin} from '@/api/admin'
 
 export default {
   data() {
@@ -115,6 +149,14 @@ export default {
         password:'',
         email: '',
         phone: ''
+      },
+      editDialogVisible:false,
+      editData: {
+        userId: '',
+        username: '',
+        email: '',
+        phone: '',
+        status: ''
       }
     }
   },
@@ -174,14 +216,61 @@ export default {
     statusText(status) {
       return status === 0 ? '活跃' : '禁用';
     },
+
     // 编辑方法
     handleEdit(index, row) {
-      console.log('编辑:', index, row);
+      // 将选中行的数据复制到 editData 中，并根据数据库中的状态值转换为字符串
+      this.editData = {
+        ...row,
+        status: row.status === 0 ? 'enabled' : 'disabled' // 如果 status 为 1，设置为 'enabled'，否则为 'disabled'
+      };
+      this.editDialogVisible = true;  // 显示编辑对话框
     },
+
+    submitEdit() {
+      const token = this.$store.state.user.token; // 从 Vuex 中获取 token
+      editAdmin(this.editData, token)
+        .then((response) => {
+          const { code, msg } = response;
+          if (code === 200) {
+            this.$message.success('管理员编辑成功');
+            this.editDialogVisible = false; // 关闭对话框
+            this.fetchData(); // 重新获取管理员列表
+          } else {
+            this.$message.error(`编辑失败: ${msg}`);
+          }
+        })
+        .catch((error) => {
+          this.$message.error(`编辑请求失败: ${error}`);
+        });
+    },
+
     // 删除方法
     handleDelete(index, row) {
-      console.log('删除:', index, row);
+      const token = this.$store.state.user.token // 从 Vuex 中获取 token
+      this.$confirm('确定删除该管理员吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteAdmin(row.id, token)
+          .then((response) => {
+            const { code, msg } = response
+            if (code === 200) {
+              this.$message.success('管理员删除成功')
+              this.fetchData() // 重新获取管理员列表
+            } else {
+              this.$message.error(`删除失败: ${msg}`)
+            }
+          })
+          .catch((error) => {
+            this.$message.error(error)
+          })
+      }).catch(() => {
+        this.$message.info('已取消删除')
+      })
     }
+
   }
 }
 </script>
