@@ -2,6 +2,7 @@ package site.bzyl.controller;
 
 import org.springframework.web.bind.annotation.*;
 import site.bzyl.common.ResponseResult;
+import site.bzyl.dto.req.UpdatePasswordReqDTO;
 import site.bzyl.dto.req.UserLoginRequestDTO;
 import site.bzyl.service.UserService;
 
@@ -28,6 +29,11 @@ public class UserController {
     @GetMapping("/info")
     public ResponseResult getUserInfo(HttpServletRequest request) {
         return userService.getUserInfo(request);
+    }
+
+    @PutMapping("/updatePassword")
+    public ResponseResult updatePassword(@RequestBody UpdatePasswordReqDTO requestParam) {
+        return userService.updatePassword(requestParam);
     }
 
 

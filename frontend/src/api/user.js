@@ -24,3 +24,12 @@ export function logout() {
     method: 'post'
   })
 }
+
+// 修改密码 API
+export function updatePassword(data) {
+  return request({
+    url: '/user/updatePassword', // 根据实际后端 API 地址修改
+    method: 'put',
+    data
+  })
+}

@@ -37,8 +37,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        // 移除Bearer
-        token = token.substring(7);
         //解析token
         String userId;
         try {

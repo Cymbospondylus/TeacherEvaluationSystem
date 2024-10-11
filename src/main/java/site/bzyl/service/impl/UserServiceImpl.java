@@ -15,12 +15,9 @@ import site.bzyl.common.RedisConstant;
 import site.bzyl.common.ResponseResult;
 import site.bzyl.common.UserConstant;
 import site.bzyl.common.enums.UserRole;
-import site.bzyl.dto.req.AddAdminReqDTO;
-import site.bzyl.dto.req.PageUserReqDTO;
-import site.bzyl.dto.req.UpdateAdminReqDTO;
+import site.bzyl.dto.req.*;
 import site.bzyl.dto.resp.PageUserRespDTO;
 import site.bzyl.dto.resp.UserInfoResponseDTO;
-import site.bzyl.dto.req.UserLoginRequestDTO;
 import site.bzyl.entity.LoginUser;
 import site.bzyl.entity.SysUserRoleDO;
 import site.bzyl.entity.UserDO;
@@ -155,6 +152,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         baseMapper.deleteById(userId);
         // 删除角色信息
         userRoleMapper.delete(Wrappers.lambdaQuery(SysUserRoleDO.class).eq(SysUserRoleDO::getUserId, userId));
+        return ResponseResult.success();
+    }
+
+    @Override
+    public ResponseResult updatePassword(UpdatePasswordReqDTO requestParam) {
+        // 获取登陆用户信息
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // 获取登录用户密码
+        String password = loginUser.getUser().getPassword();
+        // 比较输入的旧密码和数据库的旧密码是否相同
+        if (!passwordEncoder.matches(requestParam.getOldPassword(), password)) {
+            throw new RuntimeException("旧密码输入错误");
+        }
+        // 修改为新的密码
+        UserDO userDO = loginUser.getUser().setPassword(passwordEncoder.encode(requestParam.getNewPassword()));
+        baseMapper.updateById(userDO);
         return ResponseResult.success();
     }
 }
