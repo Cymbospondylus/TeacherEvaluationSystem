@@ -1,4 +1,4 @@
-package site.bzyl.dto;
+package site.bzyl.dto.resp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,17 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class UserLoginRequestDTO {
+public class UserInfoResponseDTO {
     /**
      * 用户名
      */
     private String username;
 
     /**
-     * 密码
+     * 头像
      */
-    private String password;
+    private String avatar;
+
+    /**
+     * 角色
+     */
+    private String role;
 }

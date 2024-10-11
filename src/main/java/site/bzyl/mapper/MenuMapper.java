@@ -2,7 +2,7 @@ package site.bzyl.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import site.bzyl.eneity.MenuDO;
+import site.bzyl.entity.MenuDO;
 
 import java.util.List;
 

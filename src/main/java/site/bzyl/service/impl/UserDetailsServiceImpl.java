@@ -4,13 +4,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import site.bzyl.eneity.LoginUser;
-import site.bzyl.eneity.UserDO;
+import site.bzyl.entity.LoginUser;
+import site.bzyl.entity.UserDO;
 import site.bzyl.mapper.MenuMapper;
 import site.bzyl.mapper.UserMapper;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 

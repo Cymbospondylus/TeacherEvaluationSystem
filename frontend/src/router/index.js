@@ -46,33 +46,40 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
+
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
   {
-    path: '/example',
+    path: '/management',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    redirect: '/management/admin',
+    name: 'user-management',
+    meta: { title: '用户管理', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'admin',
+        name: 'admin-management',
+        component: () => import('@/views/admin/index'),
+        meta: { title: '管理员管理', icon: 'tree' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'teacher',
+        name: 'teacher-management',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '老师管理', icon: 'tree' }
+      },
+      {
+        path: 'student',
+        name: 'teacher-management',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '学生管理', icon: 'tree' }
       }
     ]
   },

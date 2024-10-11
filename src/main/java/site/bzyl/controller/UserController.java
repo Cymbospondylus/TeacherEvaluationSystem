@@ -2,7 +2,7 @@ package site.bzyl.controller;
 
 import org.springframework.web.bind.annotation.*;
 import site.bzyl.common.ResponseResult;
-import site.bzyl.dto.UserLoginRequestDTO;
+import site.bzyl.dto.req.UserLoginRequestDTO;
 import site.bzyl.service.UserService;
 
 import javax.annotation.Resource;
@@ -29,4 +29,6 @@ public class UserController {
     public ResponseResult getUserInfo(HttpServletRequest request) {
         return userService.getUserInfo(request);
     }
+
+
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import site.bzyl.common.RedisConstant;
-import site.bzyl.eneity.LoginUser;
+import site.bzyl.entity.LoginUser;
 import site.bzyl.util.JwtUtil;
 import site.bzyl.util.RedisCache;
 

@@ -1,8 +1,6 @@
 package site.bzyl.service.impl;
 
-import com.baomidou.mybatisplus.service.IService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,10 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import site.bzyl.common.RedisConstant;
 import site.bzyl.common.ResponseResult;
-import site.bzyl.dto.UserInfoResponseDTO;
-import site.bzyl.dto.UserLoginRequestDTO;
-import site.bzyl.eneity.LoginUser;
-import site.bzyl.eneity.UserDO;
+import site.bzyl.dto.req.PageUserReqDTO;
+import site.bzyl.dto.resp.PageUserRespDTO;
+import site.bzyl.dto.resp.UserInfoResponseDTO;
+import site.bzyl.dto.req.UserLoginRequestDTO;
+import site.bzyl.entity.LoginUser;
+import site.bzyl.entity.UserDO;
 import site.bzyl.mapper.UserMapper;
 import site.bzyl.service.UserService;
 import site.bzyl.util.JwtUtil;
@@ -22,8 +22,10 @@ import site.bzyl.util.RedisCache;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
@@ -32,6 +34,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Resource
     private RedisCache redisCache;
+
+
 
     @Override
     public ResponseResult login(UserLoginRequestDTO requestParam) {
@@ -71,7 +75,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         UserInfoResponseDTO userInfoResponseDTO = UserInfoResponseDTO.builder()
                 .username(user.getUsername())
                 .avatar(user.getAvatar())
+                .role("admin")
                 .build();
         return ResponseResult.success(userInfoResponseDTO);
+    }
+
+    @Override
+    public ResponseResult pageUserByRole(PageUserReqDTO requestParam) {
+        List<PageUserRespDTO> userResult = baseMapper.selectPageByRoleId(requestParam)
+                .stream()
+                .map(each -> PageUserRespDTO.builder()
+                        .userId(each.getUserId())
+                        .phone(each.getPhone())
+                        .email(each.getEmail())
+                        .status(each.getStatus())
+                        .username(each.getUsername())
+                        .build())
+                .collect(Collectors.toList());
+        return ResponseResult.success(userResult);
     }
 }

@@ -1,4 +1,4 @@
-package site.bzyl.eneity;
+package site.bzyl.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;

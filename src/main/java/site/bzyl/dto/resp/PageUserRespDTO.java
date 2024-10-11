@@ -1,24 +1,22 @@
-package site.bzyl.eneity;
+package site.bzyl.dto.resp;
 
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import java.util.List;
 
+/**
+ * 分页查询用户响应对象
+ */
 @Data
-@TableName("tb_user")
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDO extends BaseDO implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    @TableId(type = IdType.AUTO)
+@Builder
+public class PageUserRespDTO {
     /**
      * 用户id
      */
@@ -28,16 +26,6 @@ public class UserDO extends BaseDO implements Serializable {
      * 用户名
      */
     private String username;
-
-    /**
-     * 密码
-     */
-    private String password;
-
-    /**
-     * 头像
-     */
-    private String avatar;
 
     /**
      * 状态（0：正常；1：禁用）
@@ -53,5 +41,4 @@ public class UserDO extends BaseDO implements Serializable {
      * 手机号
      */
     private String phone;
-
 }
