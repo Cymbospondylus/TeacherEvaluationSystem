@@ -50,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         // 会话信息放入 redis
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("token", jwt);
-        redisCache.setCacheObject(RedisConstant.LOGIN_TOKEN_PREFIX + userId, loginUser, 30, TimeUnit.SECONDS);
+        redisCache.setCacheObject(RedisConstant.LOGIN_TOKEN_PREFIX + userId, loginUser, 30, TimeUnit.MINUTES);
         return ResponseResult.success(resultMap);
     }
 
