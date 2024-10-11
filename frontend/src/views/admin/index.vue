@@ -1,47 +1,70 @@
 <template>
   <div class="app-container">
+    <!-- 管理员列表表格 -->
     <el-table
       v-loading="listLoading"
       :data="list"
-      element-loading-text="Loading"
+      stripe
       border
       fit
       highlight-current-row
       style="width: 100%;"
     >
       <!-- 管理员 ID 列 -->
-      <el-table-column align="center" label="管理员 ID" width="95">
-        <template slot-scope="scope">
-          {{ scope.row.id }}
-        </template>
+      <el-table-column
+        prop="userId"
+        label="管理员 ID"
+        min-width="100">
       </el-table-column>
 
       <!-- 管理员姓名列 -->
-      <el-table-column label="姓名" width="150">
-        <template slot-scope="scope">
-          {{ scope.row.name }}
-        </template>
-      </el-table-column>
-
-      <!-- 管理员角色列 -->
-      <el-table-column label="角色" width="150" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.role }}</span>
-        </template>
+      <el-table-column
+        prop="username"
+        label="姓名"
+        min-width="150">
       </el-table-column>
 
       <!-- 管理员状态列 -->
-      <el-table-column label="状态" width="110" align="center">
+      <el-table-column
+        label="状态"
+        min-width="100"
+        align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+          <el-tag :type="statusFilter(scope.row.status)">
+            {{ statusText(scope.row.status) }}
+          </el-tag>
         </template>
       </el-table-column>
 
-      <!-- 管理员创建时间列 -->
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
+      <!-- 管理员邮箱列 -->
+      <el-table-column
+        prop="email"
+        label="邮箱"
+        min-width="200"
+        align="center">
+      </el-table-column>
+
+      <!-- 管理员电话列 -->
+      <el-table-column
+        prop="phone"
+        label="电话"
+        min-width="150"
+        align="center">
+      </el-table-column>
+
+      <!-- 操作列，包含编辑和删除按钮 -->
+      <el-table-column
+        label="操作"
+        min-width="180"
+        align="center">
         <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.created_at }}</span>
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -49,28 +72,62 @@
 </template>
 
 <script>
+// 导入封装的 API 方法
+import { fetchAdminList } from '@/api/admin'
+
 export default {
-  filters: {
-    // 状态过滤器，用于映射状态到不同颜色标签
-    statusFilter(status) {
-      const statusMap = {
-        active: 'success',
-        inactive: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
-      // 模拟数据列表
-      list: [
-        {id: 1, name: 'Admin A', role: 'Super Admin', status: 'active', created_at: '2023-01-15'},
-        {id: 2, name: 'Admin B', role: 'Editor', status: 'inactive', created_at: '2023-05-20'},
-        {id: 3, name: 'Admin C', role: 'Moderator', status: 'deleted', created_at: '2023-03-10'},
-        {id: 4, name: 'Admin D', role: 'Admin', status: 'active', created_at: '2023-02-22'}
-      ],
-      listLoading: false  // 初始时不显示加载状态
+      list: [], // 数据列表
+      listLoading: false, // 加载状态
+      searchParams: {
+        roleId: '', // 角色 ID 查询参数
+        size: 10,   // 每页显示条数
+        current: 1  // 当前页码
+      }
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    // 使用封装好的 API 请求方法获取数据
+    fetchData() {
+      this.listLoading = true
+      const token = this.$store.state.user.token // 从 Vuex 中获取 token
+      const params = {
+        roleId: 1, // 查询角色 ID
+        size: this.searchParams.size,
+        current: this.searchParams.current
+      }
+      fetchAdminList(params, token)
+        .then((response) => {
+          const { code, data } = response
+          if (code === 200) {
+            this.list = data // 赋值数据到列表中
+          }
+        })
+        .catch((error) => {
+          console.error('获取数据失败:', error)
+        })
+        .finally(() => {
+          this.listLoading = false // 请求结束，隐藏加载状态
+        })
+    },
+    // 状态转换方法
+    statusFilter(status) {
+      return status === 0 ? 'success' : 'warning';
+    },
+    statusText(status) {
+      return status === 0 ? '活跃' : '禁用';
+    },
+    // 编辑方法
+    handleEdit(index, row) {
+      console.log('编辑:', index, row);
+    },
+    // 删除方法
+    handleDelete(index, row) {
+      console.log('删除:', index, row);
     }
   }
 }
