@@ -63,19 +63,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Override
     public ResponseResult getUserInfo(HttpServletRequest request) {
-        //解析token
-        String token = request.getHeader("token");
-        String userId;
-        try {
-            Claims claims = JwtUtil.parseJWT(token);
-            userId = claims.getSubject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("token非法");
-        }
-        //从redis中获取用户信息
-        String redisKey = RedisConstant.LOGIN_TOKEN_PREFIX + userId;
-        LoginUser loginUser = redisCache.getCacheObject(redisKey);
+        // 获取用户信息
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         UserDO user = loginUser.getUser();
         // 封装成InfoDTO返回
         UserInfoResponseDTO userInfoResponseDTO = UserInfoResponseDTO.builder()

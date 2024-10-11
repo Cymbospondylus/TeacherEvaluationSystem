@@ -13,7 +13,7 @@ export function getInfo(token) {
     url: '/user/info',
     method: 'get',
     headers: {
-      'token': token
+      'Authorization': `Bearer ${token}`
     }
   })
 }

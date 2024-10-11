@@ -31,12 +31,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         //如果还没有token，说明是初次请求，没登录，直接放行去登录即可
         if (!StringUtils.hasText(token)) {
             filterChain.doFilter(request, response);
             return;
         }
+        // 移除Bearer
+        token = token.substring(7);
         //解析token
         String userId;
         try {
