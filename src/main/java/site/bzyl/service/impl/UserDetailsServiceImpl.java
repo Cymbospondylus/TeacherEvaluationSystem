@@ -1,5 +1,6 @@
 package site.bzyl.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,10 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         // 根据用户名查登陆用户
-        UserDO userDO = UserDO.builder()
-                .username(s)
-                .build();
-        userDO = userMapper.selectOne(userDO);
+        UserDO userDO = userMapper.selectOne(Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getUsername, s));
         if (Objects.isNull(userDO)) {
             throw new RuntimeException("用户名不存在");
         }

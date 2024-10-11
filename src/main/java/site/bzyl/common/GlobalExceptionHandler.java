@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
  * 全局异常处理器
  */
 @Slf4j
-//@RestControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
