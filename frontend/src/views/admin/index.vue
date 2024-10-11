@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import {fetchAdminList, addAdmin, editAdmin} from '@/api/admin'
+import {fetchAdminList, addAdmin, editAdmin, deleteAdmin} from '@/api/admin'
 
 export default {
   data() {
@@ -253,7 +253,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteAdmin(row.id, token)
+        deleteAdmin(row.userId, token)
           .then((response) => {
             const { code, msg } = response
             if (code === 200) {

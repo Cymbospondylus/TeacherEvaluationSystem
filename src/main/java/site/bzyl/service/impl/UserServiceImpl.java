@@ -147,4 +147,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         baseMapper.updateById(userDO);
         return ResponseResult.success();
     }
+
+    @Override
+    @Transactional
+    public ResponseResult deleteAdmin(Long userId) {
+        // 删除用户信息
+        baseMapper.deleteById(userId);
+        // 删除角色信息
+        userRoleMapper.delete(Wrappers.lambdaQuery(SysUserRoleDO.class).eq(SysUserRoleDO::getUserId, userId));
+        return ResponseResult.success();
+    }
 }

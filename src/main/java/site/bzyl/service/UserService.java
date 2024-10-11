@@ -22,4 +22,6 @@ public interface UserService extends IService<UserDO> {
     ResponseResult addAdmin(AddAdminReqDTO requestParam);
 
     ResponseResult updateAdmin(Long userId, UpdateAdminReqDTO requestParam);
+
+    ResponseResult deleteAdmin(Long userId);
 }

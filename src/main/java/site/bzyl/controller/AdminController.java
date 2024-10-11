@@ -32,4 +32,9 @@ public class AdminController {
     public ResponseResult updateAdmin(@PathVariable Long userId, @RequestBody UpdateAdminReqDTO requestParam) {
         return userService.updateAdmin(userId, requestParam);
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseResult deleteAdmin(@PathVariable Long userId) {
+        return userService.deleteAdmin(userId);
+    }
 }
