@@ -1,33 +1,31 @@
-package site.bzyl.dto.resp;
+package site.bzyl.dto.req;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 
 /**
- * 分页查询用户响应对象
+ * 新增管理员
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PageUserRespDTO {
-    /**
-     * 用户id
-     */
-    private Long userId;
-
+public class AddAdminReqDTO {
     /**
      * 用户名
      */
+    @NotNull
     private String username;
 
     /**
-     * 状态（0：正常；1：禁用）
+     * 密码
      */
-    private Integer status;
+    @NotNull
+    private String password;
 
     /**
      * 邮箱

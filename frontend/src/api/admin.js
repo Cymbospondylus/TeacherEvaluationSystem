@@ -12,3 +12,16 @@ export function fetchAdminList(data, token) {
     data // 请求体中携带参数
   })
 }
+
+
+// 添加管理员
+export function addAdmin(data, token) {
+  return request({
+    url: '/admin',
+    method: 'post',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    data // 请求体中携带表单数据
+  })
+}

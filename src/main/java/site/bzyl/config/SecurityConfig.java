@@ -36,9 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
-
-
     /**
      * 注入 AuthenticationManager 用于认证登陆
      */

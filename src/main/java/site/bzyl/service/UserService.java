@@ -1,7 +1,8 @@
 package site.bzyl.service;
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import site.bzyl.common.ResponseResult;
+import site.bzyl.dto.req.AddAdminReqDTO;
 import site.bzyl.dto.req.PageUserReqDTO;
 import site.bzyl.dto.req.UserLoginRequestDTO;
 import site.bzyl.entity.UserDO;
@@ -16,4 +17,6 @@ public interface UserService extends IService<UserDO> {
     ResponseResult getUserInfo(HttpServletRequest request);
 
     ResponseResult pageUserByRole(PageUserReqDTO requestParam);
+
+    ResponseResult addAdmin(AddAdminReqDTO requestParam);
 }

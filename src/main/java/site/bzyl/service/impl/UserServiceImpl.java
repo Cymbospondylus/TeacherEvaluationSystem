@@ -1,20 +1,30 @@
 package site.bzyl.service.impl;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.bzyl.common.RedisConstant;
 import site.bzyl.common.ResponseResult;
+import site.bzyl.common.UserConstant;
+import site.bzyl.common.enums.UserRole;
+import site.bzyl.dto.req.AddAdminReqDTO;
 import site.bzyl.dto.req.PageUserReqDTO;
 import site.bzyl.dto.resp.PageUserRespDTO;
 import site.bzyl.dto.resp.UserInfoResponseDTO;
 import site.bzyl.dto.req.UserLoginRequestDTO;
 import site.bzyl.entity.LoginUser;
+import site.bzyl.entity.SysUserRoleDO;
 import site.bzyl.entity.UserDO;
 import site.bzyl.mapper.UserMapper;
+import site.bzyl.mapper.UserRoleMapper;
 import site.bzyl.service.UserService;
 import site.bzyl.util.JwtUtil;
 import site.bzyl.util.RedisCache;
@@ -34,6 +44,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Resource
     private RedisCache redisCache;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
 
 
@@ -93,5 +109,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                         .build())
                 .collect(Collectors.toList());
         return ResponseResult.success(userResult);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseResult addAdmin(AddAdminReqDTO requestParam) {
+        UserDO userDO = baseMapper.selectOne(Wrappers.lambdaQuery(UserDO.class)
+                .eq(UserDO::getUsername, requestParam.getUsername()));
+        if (userDO != null) {
+            throw new RuntimeException("用户名已存在");
+        }
+        // 添加管理员用户
+        userDO = UserDO.builder()
+                .username(requestParam.getUsername())
+                .password(passwordEncoder.encode(requestParam.getPassword()))
+                .phone(requestParam.getPhone())
+                .email(requestParam.getEmail())
+                .avatar(UserConstant.DEFAULT_AVATAR)
+                .build();
+        baseMapper.insert(userDO);
+        // 添加管理员角色
+        SysUserRoleDO userRoleDO = SysUserRoleDO.builder()
+                .userId(userDO.getUserId())
+                .roleId(UserRole.ADMIN.getRoleId())
+                .build();
+        userRoleMapper.insert(userRoleDO);
+        return ResponseResult.success();
     }
 }
