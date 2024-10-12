@@ -66,7 +66,7 @@ export const constantRoutes = [
       {
         path: 'admin',
         name: 'admin-management',
-        component: () => import('@/views/admin/index'),
+        component: () => import('@/views/admin/AdminManagement.vue'),
         meta: { title: '管理员管理', icon: 'tree' }
       },
       {
@@ -78,7 +78,7 @@ export const constantRoutes = [
       {
         path: 'student',
         name: 'teacher-management',
-        component: () => import('@/views/student/index'),
+        component: () => import('@/views/student/StudentManagement.vue'),
         meta: { title: '学生管理', icon: 'tree' }
       }
     ]

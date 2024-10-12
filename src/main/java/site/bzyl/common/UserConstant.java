@@ -9,4 +9,9 @@ public class UserConstant {
      */
     public static final String DEFAULT_AVATAR = "https://th.bing.com/th/id/OIP.khbwpM_nB0w-T_fIhO9Z_QHaHa?rs=1&pid=ImgDetMain";
 
+    /**
+     * 用户默认密码
+     */
+    public static final String DEFAULT_PASSWORD = "123456";
+
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="site.bzyl.mapper.StudentMapper">
+    <select id="pageStudent" resultType="site.bzyl.dto.resp.ListStudentDTO">
+        <bind name="offset" value="(requestParam.current - 1) * requestParam.size"/>
+        SELECT
+        u.user_id user_id,
+        username,
+        `name` name,
+        s.student_number student_number,
+        avatar,
+        `status` status,
+        email,
+        phone,
+        create_time,
+        update_time,
+        del_flag
+        FROM
+        sys_user_role ur
+        LEFT JOIN tb_user u ON u.user_id = ur.user_id
+        LEFT JOIN tb_student s ON u.user_id = s.user_id
+        WHERE
+        ur.role_id = #{requestParam.roleId}
+        LIMIT  #{offset}, #{requestParam.size};
+    </select>
+</mapper>

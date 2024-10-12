@@ -20,5 +20,8 @@ public class SysUserRoleDO {
      */
     private Long userId;
 
+    /**
+     * 角色Id
+     */
     private Long roleId;
 }
