@@ -1,13 +1,11 @@
 package site.bzyl.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +14,8 @@ import site.bzyl.common.ResponseResult;
 import site.bzyl.common.UserConstant;
 import site.bzyl.common.enums.UserRole;
 import site.bzyl.dto.req.*;
+import site.bzyl.dto.req.admin.AddAdminReqDTO;
+import site.bzyl.dto.req.admin.UpdateAdminReqDTO;
 import site.bzyl.dto.resp.PageUserRespDTO;
 import site.bzyl.dto.resp.UserInfoResponseDTO;
 import site.bzyl.entity.LoginUser;

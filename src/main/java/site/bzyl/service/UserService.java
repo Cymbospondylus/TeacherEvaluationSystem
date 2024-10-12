@@ -1,13 +1,13 @@
 package site.bzyl.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import site.bzyl.common.ResponseResult;
 import site.bzyl.dto.req.*;
-import site.bzyl.entity.UserDO;
+import site.bzyl.dto.req.admin.AddAdminReqDTO;
+import site.bzyl.dto.req.admin.UpdateAdminReqDTO;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface UserService extends IService<UserDO> {
+public interface UserService {
     ResponseResult login(UserLoginRequestDTO requestParam);
 
     ResponseResult logout();

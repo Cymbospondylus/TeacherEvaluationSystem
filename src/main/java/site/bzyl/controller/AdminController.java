@@ -2,9 +2,9 @@ package site.bzyl.controller;
 
 import org.springframework.web.bind.annotation.*;
 import site.bzyl.common.ResponseResult;
-import site.bzyl.dto.req.AddAdminReqDTO;
+import site.bzyl.dto.req.admin.AddAdminReqDTO;
 import site.bzyl.dto.req.PageUserReqDTO;
-import site.bzyl.dto.req.UpdateAdminReqDTO;
+import site.bzyl.dto.req.admin.UpdateAdminReqDTO;
 import site.bzyl.service.UserService;
 
 import javax.annotation.Resource;

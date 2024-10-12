@@ -1,31 +1,18 @@
-package site.bzyl.dto.req;
+package site.bzyl.dto.req.teacher;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 /**
- * 新增管理员
+ * 编辑管理员
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddAdminReqDTO {
-    /**
-     * 用户名
-     */
-    @NotNull
-    private String username;
-
-    /**
-     * 密码
-     */
-    @NotNull
-    private String password;
+public class UpdateTeacherReqDTO {
 
     /**
      * 邮箱
@@ -36,4 +23,9 @@ public class AddAdminReqDTO {
      * 手机号
      */
     private String phone;
+
+    /**
+     * 状态
+     */
+    private String status;
 }

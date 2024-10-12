@@ -72,13 +72,13 @@ export const constantRoutes = [
       {
         path: 'teacher',
         name: 'teacher-management',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/teacher/TeacherManagement.vue'),
         meta: { title: '老师管理', icon: 'tree' }
       },
       {
         path: 'student',
         name: 'teacher-management',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/student/index'),
         meta: { title: '学生管理', icon: 'tree' }
       }
     ]
