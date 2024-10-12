@@ -85,14 +85,14 @@ export const constantRoutes = [
   },
 
   {
-    path: '/form',
+    path: '/indicator',
     component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'evaluation',
+        name: 'teacher-evaluation',
+        component: () => import('@/views/evaluation/TeacherEvaluation.vue'),
+        meta: { title: '评价指标管理', icon: 'form' }
       }
     ]
   },

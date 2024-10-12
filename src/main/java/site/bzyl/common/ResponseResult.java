@@ -61,4 +61,12 @@ public class ResponseResult<T> {
         responseResult.data = null;
         return responseResult;
     }
+
+    public static <T> ResponseResult error(String msg) {
+        ResponseResult<T> responseResult = new ResponseResult<>();
+        responseResult.code = ERROR_CODE;
+        responseResult.msg = msg;
+        responseResult.data = null;
+        return responseResult;
+    }
 }

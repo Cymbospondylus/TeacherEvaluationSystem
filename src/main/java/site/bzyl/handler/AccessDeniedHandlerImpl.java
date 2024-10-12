@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 import site.bzyl.common.ResponseResult;
 import site.bzyl.util.WebUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * 授权失败处理器
