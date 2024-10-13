@@ -13,17 +13,11 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <!-- 管理员 ID 列 -->
-      <el-table-column
-        prop="userId"
-        label="管理员 ID"
-        min-width="100">
-      </el-table-column>
 
       <!-- 管理员姓名列 -->
       <el-table-column
         prop="username"
-        label="用户名"
+        label="管理员用户名"
         min-width="150">
       </el-table-column>
 

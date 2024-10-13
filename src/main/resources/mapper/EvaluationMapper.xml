@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="site.bzyl.mapper.EvaluationMapper">
+    <!-- 查询需要评价的教师列表 -->
+    <select id="listTeachers" resultType="site.bzyl.entity.TeacherDO">
+        SELECT teacher_id, name
+        FROM tb_teacher
+        WHERE teacher_id IN (
+        SELECT DISTINCT teacher_id FROM tb_student_evaluation
+        WHERE student_id = #{studentId}
+        )
+    </select>
+
+    <!-- 查询所有评价指标 -->
+    <select id="listIndicators" resultType="site.bzyl.entity.IndicatorDO">
+        SELECT * FROM tb_indicator
+    </select>
+    <select id="getEvaluationResult" resultType="java.util.Map">
+        SELECT
+        i.name AS indicator_name,
+        AVG(e.score) AS average_score
+        FROM
+        tb_student_evaluation e
+        JOIN
+        tb_indicator i ON e.indicator_id = i.indicator_id
+        WHERE
+        e.teacher_id = #{teacherId}
+        GROUP BY
+        e.indicator_id, i.name;
+    </select>
+</mapper>

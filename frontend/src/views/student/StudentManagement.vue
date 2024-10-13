@@ -13,12 +13,6 @@
       highlight-current-row
       style="width: 100%;">
 
-      <!-- 用户ID列 -->
-      <el-table-column
-        prop="userId"
-        label="用户 ID"
-        min-width="100" />
-
       <!-- 用户名列 -->
       <el-table-column
         prop="username"

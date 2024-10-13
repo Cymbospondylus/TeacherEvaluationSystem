@@ -13,12 +13,6 @@
       highlight-current-row
       style="width: 100%;">
 
-      <!-- 教师 ID 列 -->
-      <el-table-column
-        prop="teacherId"
-        label="教师 ID"
-        min-width="100" />
-
       <!-- 教师姓名列 -->
       <el-table-column
         prop="name"
@@ -57,14 +51,15 @@
         </template>
       </el-table-column>
 
-      <!-- 操作列，包含编辑和删除按钮 -->
+      <!-- 操作列，包含编辑、删除和查看评价按钮 -->
       <el-table-column
         label="操作"
-        min-width="180"
+        min-width="250"
         align="center">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" type="success" @click="viewEvaluation(scope.row)">查看评价</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -106,11 +101,22 @@
         <el-button type="primary" @click="submitEdit">确定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 查看评价结果弹窗 -->
+    <el-dialog :title="`教师评价结果 - ${currentTeacher.name}`" :visible.sync="evaluationDialogVisible" width="70%">
+      <!-- ECharts 图表容器 -->
+      <div id="evaluation-chart" style="width: 100%; height: 400px;"></div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="evaluationDialogVisible = false">关闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import * as echarts from 'echarts';
 import { fetchTeacherList, addTeacher, editTeacher, deleteTeacher } from '@/api/teacher'
+import { fetchTeacherEvaluations } from '@/api/evaluation'
 
 export default {
   data() {
@@ -129,7 +135,11 @@ export default {
         name: '',
         email: '',
         phone: ''
-      }
+      },
+      evaluationDialogVisible: false, // 控制查看评价结果弹窗显示
+      evaluationResults: [], // 评价结果数据
+      evaluationLoading: false, // 评价结果加载状态
+      currentTeacher: {}, // 当前选中的教师信息
     }
   },
   created() {
@@ -193,6 +203,122 @@ export default {
         })
       })
     },
+    // 查看教师评价结果并绘制图表
+    viewEvaluation(row) {
+      this.currentTeacher = row;
+      this.evaluationDialogVisible = true;
+      this.evaluationLoading = true;
+
+      // 获取评价数据
+      fetchTeacherEvaluations(row.teacherId).then((response) => {
+        const data = response.data;
+        const indicatorNames = [];
+        const averageScores = [];
+
+        // 遍历每个指标，获取名称和平均分
+        Object.keys(data).forEach(indicator => {
+          indicatorNames.push(data[indicator].indicator_name);
+          averageScores.push(data[indicator].average_score);
+        });
+
+        // 调用函数绘制图表
+        this.drawChart(indicatorNames, averageScores);
+      }).finally(() => {
+        this.evaluationLoading = false;
+      });
+    },
+
+    drawChart(indicatorNames, averageScores) {
+      const chartDom = document.getElementById('evaluation-chart');
+      const myChart = echarts.init(chartDom);
+
+      const option = {
+        title: {
+          text: '教师评价结果',
+          left: 'center',
+          textStyle: {
+            color: '#333',
+            fontSize: 20
+          }
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow' // 鼠标悬停时显示阴影
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: indicatorNames,
+          axisLabel: {
+            interval: 0,
+            rotate: 30, // 旋转标签避免重叠
+            color: '#333',
+            fontSize: 12
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#ccc'
+            }
+          }
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 5,
+          axisLabel: {
+            formatter: '{value} 分',
+            color: '#333',
+            fontSize: 12
+          },
+          splitLine: {
+            lineStyle: {
+              type: 'dashed' // 使用虚线显示网格
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#ccc'
+            }
+          }
+        },
+        series: [{
+          name: '平均分',
+          type: 'bar',
+          data: averageScores,
+          barWidth: '50%', // 控制柱子的宽度
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(
+              0, 0, 0, 1, // 垂直渐变
+              [
+                { offset: 0, color: '#83bff6' },
+                { offset: 0.5, color: '#188df0' },
+                { offset: 1, color: '#188df0' }
+              ]
+            ),
+            shadowColor: 'rgba(0, 0, 0, 0.3)',
+            shadowBlur: 10
+          },
+          label: {
+            show: true,
+            position: 'top',
+            formatter: '{c} 分',
+            color: '#333',
+            fontSize: 12
+          }
+        }]
+      };
+
+      // 使用刚指定的配置项和数据显示图表
+      myChart.setOption(option);
+    }
+    ,
     // 格式化日期
     formatDate(dateString) {
       const date = new Date(dateString);
