@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListStudentDTO {
+public class StudentResponseDTO {
     /**
      * 用户id
      */

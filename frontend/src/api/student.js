@@ -34,3 +34,20 @@ export function deleteStudent(id) {
     method: 'delete',
   })
 }
+
+
+export function getUserInfo() {
+  return request({
+    url: '/student/info',
+    method: 'get'
+  })
+}
+
+export function updateUserInfo(data) {
+  return request({
+    url: '/student/update',
+    method: 'post',
+    data
+  })
+}
+

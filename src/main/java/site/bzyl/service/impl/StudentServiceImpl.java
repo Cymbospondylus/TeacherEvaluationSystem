@@ -10,7 +10,7 @@ import site.bzyl.common.enums.UserRole;
 import site.bzyl.dto.req.PageUserReqDTO;
 import site.bzyl.dto.req.student.AddStudentReqDTO;
 import site.bzyl.dto.req.student.UpdateStudentReqDTO;
-import site.bzyl.dto.resp.ListStudentDTO;
+import site.bzyl.dto.resp.StudentResponseDTO;
 import site.bzyl.entity.StudentDO;
 import site.bzyl.entity.SysUserRoleDO;
 import site.bzyl.entity.UserDO;
@@ -38,7 +38,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseResult pageStudent(PageUserReqDTO requestParam) {
-        List<ListStudentDTO> studentDTOS = studentMapper.pageStudent(requestParam);
+        List<StudentResponseDTO> studentDTOS = studentMapper.pageStudent(requestParam);
         return ResponseResult.success(studentDTOS);
     }
 
@@ -86,7 +86,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public ResponseResult updateStudent(String userId, UpdateStudentReqDTO requestParam) {
+    public ResponseResult updateStudent(Long userId, UpdateStudentReqDTO requestParam) {
         UserDO userDO = userMapper.selectById(userId);
         userDO.setEmail(requestParam.getEmail())
                 .setPhone(requestParam.getPhone());
@@ -96,5 +96,24 @@ public class StudentServiceImpl implements StudentService {
                 .setName(requestParam.getName());
         studentMapper.updateById(studentDO);
         return ResponseResult.success();
+    }
+
+    @Override
+    public ResponseResult getStudentInfo(Long userId) {
+        UserDO userDO = userMapper.selectById(userId);
+        StudentDO studentDO = studentMapper.selectOne(Wrappers.lambdaQuery(StudentDO.class).eq(StudentDO::getUserId, userId));
+        return ResponseResult.success(StudentResponseDTO.builder()
+                        .userId(userDO.getUserId())
+                        .username(userDO.getUsername())
+                .userId(userDO.getUserId())
+                .studentNumber(studentDO.getStudentNumber())
+                .name(studentDO.getName())
+                .createTime(userDO.getCreateTime())
+                .updateTime(userDO.getUpdateTime())
+                .status(userDO.getStatus())
+                .avatar(userDO.getAvatar())
+                .email(userDO.getEmail())
+                .phone(userDO.getPhone())
+                .build());
     }
 }

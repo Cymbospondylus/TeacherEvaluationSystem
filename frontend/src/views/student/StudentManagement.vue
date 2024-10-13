@@ -168,7 +168,7 @@ export default {
         roleId: 2
       };
       fetchStudentList(params).then((response) => {
-        this.list = response.data;
+        this.list = response.data.filter(item => item !== null); // 过滤掉 null 数据
       }).finally(() => {
         this.listLoading = false;
       })

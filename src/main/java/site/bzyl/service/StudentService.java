@@ -12,5 +12,7 @@ public interface StudentService {
 
     ResponseResult addStudent(AddStudentReqDTO requestParam);
 
-    ResponseResult updateStudent(String userId, UpdateStudentReqDTO requestParam);
+    ResponseResult updateStudent(Long userId, UpdateStudentReqDTO requestParam);
+
+    ResponseResult getStudentInfo(Long userId);
 }

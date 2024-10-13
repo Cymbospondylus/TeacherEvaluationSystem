@@ -14,4 +14,9 @@ public class UserConstant {
      */
     public static final String DEFAULT_PASSWORD = "123456";
 
+    /**
+     * 评价教师权限
+     */
+    public static final String EVALUATION_PERMISSION = "evaluate:teacher";
+
 }

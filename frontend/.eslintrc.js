@@ -1,4 +1,9 @@
 module.exports = {
+  rules: {
+    'no-console': 'off',
+    'no-unused-vars': 'off',
+    // 可以根据需要禁用其他规则
+  },
   root: true,
   parserOptions: {
     parser: 'babel-eslint',

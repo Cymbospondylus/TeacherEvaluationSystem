@@ -1,5 +1,6 @@
 package site.bzyl.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.bzyl.common.ResponseResult;
@@ -24,6 +25,7 @@ public class TeacherController {
      * 分页获取教师列表
      */
     @PostMapping("/list")
+    @PreAuthorize("hasAuthority('management:tercher')")
     public ResponseResult pageTeacherList(@RequestBody PageTeacherReqDTO requestParam) {
         return teacherService.pageTeacherList(requestParam);
     }
@@ -32,6 +34,7 @@ public class TeacherController {
      * 添加教师
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('management:tercher')")
     public ResponseResult addTeacher(@Validated @RequestBody AddTeacherReqDTO requestParam) {
         return teacherService.addTeacher(requestParam);
     }
@@ -40,6 +43,7 @@ public class TeacherController {
      * 更新教师信息
      */
     @PutMapping("/{teacherId}")
+    @PreAuthorize("hasAuthority('management:tercher')")
     public ResponseResult updateTeacher(@PathVariable Long teacherId, @RequestBody UpdateTeacherReqDTO requestParam) {
         return teacherService.updateTeacher(teacherId, requestParam);
     }
@@ -48,6 +52,7 @@ public class TeacherController {
      * 删除教师
      */
     @DeleteMapping("/{teacherId}")
+    @PreAuthorize("hasAuthority('management:tercher')")
     public ResponseResult deleteTeacher(@PathVariable Long teacherId) {
         return teacherService.deleteTeacher(teacherId);
     }

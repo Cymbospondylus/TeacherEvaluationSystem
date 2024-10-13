@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">欢迎你，{{ name }}</div>
     <!-- 修改密码按钮 -->
     <el-button type="primary" @click="showPasswordDialog = true">修改密码</el-button>
 

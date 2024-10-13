@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="site.bzyl.mapper.StudentMapper">
-    <select id="pageStudent" resultType="site.bzyl.dto.resp.ListStudentDTO">
+    <select id="pageStudent" resultType="site.bzyl.dto.resp.StudentResponseDTO">
         <bind name="offset" value="(requestParam.current - 1) * requestParam.size"/>
         SELECT
         u.user_id user_id,

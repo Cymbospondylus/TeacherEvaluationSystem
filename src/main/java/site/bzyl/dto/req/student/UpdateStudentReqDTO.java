@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UpdateStudentReqDTO {
+    private Long userId;
     /**
      * 用户名
      */

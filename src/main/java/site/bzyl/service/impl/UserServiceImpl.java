@@ -89,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         UserInfoResponseDTO userInfoResponseDTO = UserInfoResponseDTO.builder()
                 .username(user.getUsername())
                 .avatar(user.getAvatar())
-                .role("admin")
+                .role(loginUser.getPermissions().contains(UserConstant.EVALUATION_PERMISSION) ? UserRole.STUDENT.getName() : UserRole.ADMIN.getName())
                 .build();
         return ResponseResult.success(userInfoResponseDTO);
     }

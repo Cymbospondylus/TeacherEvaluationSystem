@@ -1,29 +1,18 @@
 package site.bzyl.common.enums;
 
-import lombok.Data;
 
-/**
- * 用户角色枚举
- */
+import lombok.Getter;
 
+@Getter
 public enum UserRole {
-    /**
-     * 管理员
-     */
-    ADMIN(1L),
+    ADMIN(1L, "admin"),
+    STUDENT(2L, "student");
 
-    /**
-     * 学生
-     */
-    STUDENT(2L);
+    private final Long roleId;
+    private final String name;
 
-    private Long roleId;
-
-    UserRole(Long roleId) {
+    UserRole(Long roleId, String name) {
         this.roleId = roleId;
-    }
-
-    public Long getRoleId() {
-        return roleId;
+        this.name = name;
     }
 }
